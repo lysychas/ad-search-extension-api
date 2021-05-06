@@ -8,8 +8,7 @@ app.use(cors());
 
 // MONGO CONNECTION
 const MongoClient = require('mongodb').MongoClient;
-const uri =
-  'mongodb+srv://luke123:luke123@cluster0.ncvdl.mongodb.net/adExtension?retryWrites=true&w=majority';
+const uri = process.env.DATABASE_URL;
 const client = new MongoClient(uri, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
