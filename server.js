@@ -8,7 +8,7 @@ app.use(cors());
 
 // MONGO CONNECTION
 const MongoClient = require('mongodb').MongoClient;
-const uri = process.argv[2];
+const uri = process.env.DATABASE_URL;
 const client = new MongoClient(uri, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -17,8 +17,8 @@ client.connect();
 
 // SEARCH METHOD
 app.get('/', (req, res) => {
-  res.send('Ad Search Extension server is working!')
-})
+  res.send('Ad Search Extension server is working!');
+});
 
 app.get('/search', (req, res) => {
   let keyword = req.query.q;
