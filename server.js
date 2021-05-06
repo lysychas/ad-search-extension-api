@@ -8,7 +8,7 @@ app.use(cors());
 
 // MONGO CONNECTION
 const MongoClient = require('mongodb').MongoClient;
-const uri = process.env.DATABASE_URL;
+const uri = process.env.DATABASE_URL || process.argv[2];
 const client = new MongoClient(uri, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -41,23 +41,23 @@ app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}!`);
 });
 
-// // Create a function to terminate your app gracefully:
-// function gracefulShutdown() {
-//   // First argument is [force], see mongoose doc.
-//   client.close(() => {
-//     console.log('MongoDb connection closed.');
-//   });
-// }
+// Create a function to terminate your app gracefully:
+function gracefulShutdown() {
+  // First argument is [force], see mongoose doc.
+  client.close(() => {
+    console.log('MongoDb connection closed.');
+  });
+}
 
-// // Ask node to run your function before exit:
+// Ask node to run your function before exit:
 
-// // This will handle process.exit():
-// process.on('exit', gracefulShutdown);
+// This will handle process.exit():
+process.on('exit', gracefulShutdown);
 
-// // This will handle kill commands, such as CTRL+C:
-// process.on('SIGINT', gracefulShutdown);
-// process.on('SIGTERM', gracefulShutdown);
-// process.on('SIGKILL', gracefulShutdown);
+// This will handle kill commands, such as CTRL+C:
+process.on('SIGINT', gracefulShutdown);
+process.on('SIGTERM', gracefulShutdown);
+process.on('SIGKILL', gracefulShutdown);
 
-// // This will prevent dirty exit on code-fault crashes:
-// process.on('uncaughtException', gracefulShutdown);
+// This will prevent dirty exit on code-fault crashes:
+process.on('uncaughtException', gracefulShutdown);
