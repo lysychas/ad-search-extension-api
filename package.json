@@ -5,7 +5,8 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "node server.js",
+    "run": "DATABASE_URL=mongodb+srv://luke123:luke123@cluster0.ncvdl.mongodb.net/adExtension?retryWrites=true&w=majority nodemon server.js"
   },
   "keywords": [],
   "author": "",
