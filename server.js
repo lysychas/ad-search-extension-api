@@ -17,7 +17,11 @@ client.connect();
 
 // SEARCH METHOD
 app.get('/', (req, res) => {
-  let keyword = req.query.search;
+  res.send('Ad Search Extension server is working!')
+})
+
+app.get('/search', (req, res) => {
+  let keyword = req.query.q;
   console.log(keyword);
 
   const collection = client.db('adExtension').collection('links');
