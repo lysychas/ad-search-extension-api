@@ -15,11 +15,12 @@ const client = new MongoClient(uri, {
 });
 client.connect();
 
-// SEARCH METHOD
+// LANDING PAGE
 app.get('/', (req, res) => {
   res.send('Ad Search Extension server is working!');
 });
 
+// SEARCH METHOD
 app.get('/search', (req, res) => {
   let keyword = req.query.q;
   console.log(keyword);
