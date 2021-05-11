@@ -20,10 +20,24 @@ app.get('/', (req, res) => {
   res.send('Ad Search Extension server is working!');
 });
 
+// GET ALL ADS
+app.get('/search/all', (req, res) => {
+  const collection = client.db('adExtension').collection('links');
+
+  collection
+    .find({})
+    .toArray()
+    .then((data) => {
+      // console.log(data);
+      res.json(data);
+    })
+    .catch((err) => console.log(err));
+});
+
 // SEARCH METHOD
 app.get('/search', (req, res) => {
   let keyword = req.query.q;
-  console.log(keyword);
+  // console.log(keyword);
 
   const collection = client.db('adExtension').collection('links');
 
@@ -32,12 +46,12 @@ app.get('/search', (req, res) => {
     .sort({ score: { $meta: 'textScore' } })
     .toArray()
     .then((data) => {
-      console.log(data);
+      // console.log(data);
       res.json(data);
     })
     .catch((err) => console.log(err));
 });
 
-app.listen(PORT, () => {
+module.exports = app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}!`);
 });
