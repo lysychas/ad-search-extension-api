@@ -1,73 +1,42 @@
-let chai = require('chai');
-let chaiHttp = require('chai-http');
-let chaiAsPromised = require('chai-as-promised');
-let server = require('../server');
+const app = require('../server');
+const supertest = require('supertest');
 
-//Assertion Style
-chai.should();
+// MONGO CONNECTION
+const MongoClient = require('mongodb').MongoClient;
+const uri = process.env.DATABASE_URL || process.argv[2];
+const client = new MongoClient(uri, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
 
-chai.use(chaiHttp);
-chai.use(chaiAsPromised);
+beforeEach((done) => {
+  client.connect(() => done());
+});
 
-describe('Ads API', () => {
-  /**
-   * Test the GET/search/all route
-   */
-  describe('GET /search/all', () => {
-    it('It should GET all the ads', async (done) => {
-      await chai
-        .request(server)
-        .get('/search/all')
-        .then((err, response) => {
-          response.should.eventually.have.status(200);
-          response.body.should.eventually.be.a('array');
-          response.body.length.should.eventually.be.eq(4);
-          done();
-        });
-    });
+afterEach((done) => {
+  client.close(() => done());
+});
 
-    it('It should NOT GET all the ads', (done) => {
-      chai
-        .request(server)
-        .get('/all')
-        .end((err, response) => {
-          response.should.have.status(404);
-          done();
-        });
-    })
+describe('Post Endpoints', () => {
+  it('should create a new post', async () => {
+    const res = await supertest(app).get('/search/all');
+    expect(res.statusCode).toEqual(200);
+    expect(res.body).toBeTruthy();
   });
+});
 
-  /**
-   * Test the GET/search route
-   */
-  describe('GET /search/:q', () => {
-    it('It should GET an ad by keyword', (done) => {
-      const existent = 'boats';
-      chai
-        .request(server)
-        .get('/search?q=' + existent)
-        .end((err, response) => {
-          response.should.have.status(200);
-          response.body.should.be.a('arrayt');
-          response.body.should.have.deep.property('_id');
-          response.body.should.have.property('title');
-          response.body.should.have.property('link');
-          response.body.should.have.property('description');
-          done();
-        });
-    });
+test('GET /api/posts', async () => {
+  await supertest(app)
+    .get('/search/all')
+    .expect(200)
+    .then((response) => {
+      // Check type and length
+      expect(Array.isArray(response.body)).toBeTruthy();
+      // expect(response.body.length).toEqual(1);
 
-    it('It should NOT GET an ad by keyword', (done) => {
-      const nonExistent = 'nonExistent';
-      chai
-        .request(server)
-        .get('/search?q=' + nonExistent)
-        .end((err, response) => {
-          response.should.have.status(200);
-          response.body.should.be.eq('array');
-          response.body.length.should.be.eq(0);
-          done();
-        });
+      // // Check data
+      // expect(response.body[0]._id).toBe(post.id);
+      // expect(response.body[0].title).toBe(post.title);
+      // expect(response.body[0].content).toBe(post.content);
     });
-  });
 });

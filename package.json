@@ -4,9 +4,15 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "test": "mocha test/test.js",
-    "start": "node server.js",
-    "local": "nodemon server.js mongodb+srv://luke123:luke123@cluster0.ncvdl.mongodb.net/adExtension?retryWrites=true&w=majority"
+    "test": "jest --testTimeout=10000",
+    "start": "node index.js",
+    "local": "nodemon index.js mongodb+srv://luke123:luke123@cluster0.ncvdl.mongodb.net/adExtension?retryWrites=true&w=majority"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "coveragePathIgnorePatterns": [
+      "/node_modules/"
+    ]
   },
   "keywords": [],
   "author": "",
@@ -17,9 +23,7 @@
     "mongodb": "^3.6.6"
   },
   "devDependencies": {
-    "chai": "^4.3.4",
-    "chai-as-promised": "^7.1.1",
-    "chai-http": "^4.3.0",
-    "mocha": "^8.4.0"
+    "jest": "^26.6.3",
+    "supertest": "^6.1.3"
   }
 }
