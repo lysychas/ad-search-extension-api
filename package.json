@@ -2,7 +2,7 @@
   "name": "my-server",
   "version": "1.0.0",
   "description": "",
-  "main": "server.js",
+  "main": "index.js",
   "scripts": {
     "test": "jest --testTimeout=10000",
     "start": "node index.js",
