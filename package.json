@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest --testTimeout=10000",
+    "test": "jest",
     "start": "node index.js",
     "local": "nodemon index.js mongodb+srv://luke123:luke123@cluster0.ncvdl.mongodb.net/adExtension?retryWrites=true&w=majority"
   },
