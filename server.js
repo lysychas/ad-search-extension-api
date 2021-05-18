@@ -36,16 +36,48 @@ app.get('/search/all', (req, res) => {
 // SEARCH METHOD
 app.get('/search', (req, res) => {
   let keyword = req.query.q;
-  // console.log(keyword);
+
+  const projection = {
+    _id: 0,
+    title: 1,
+    link: 1,
+    description: 1,
+    score: { $meta: 'textScore' },
+  };
 
   const collection = client.db('adExtension').collection('links');
-
   collection
-    .find({ $text: { $search: keyword } }, { score: { $meta: 'textScore' } })
+    .find({ $text: { $search: keyword } })
     .sort({ score: { $meta: 'textScore' } })
+    .project(projection)
     .toArray()
     .then((data) => {
-      // console.log(data);
+      res.json(data);
+    })
+    .catch((err) => console.log(err));
+});
+
+app.put('/keyword', (req, res) => {
+  let keyword = req.body.keyword;
+  const keywords = client.db('adExtension').collection('keywords');
+  keywords.updateOne(
+    { keyword: keyword },
+    { $inc: { searched: 1 } },
+    { upsert: true }
+  );
+
+  const projection = {
+    _id: 0,
+    keyword: 1,
+    searched: 1,
+  };
+
+  keywords
+    .find({ keyword: keyword })
+    .project(projection)
+    .toArray()
+    .then((data) => {
+      console.log(data);
       res.json(data);
     })
     .catch((err) => console.log(err));
